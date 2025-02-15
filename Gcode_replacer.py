@@ -52,7 +52,7 @@ def list_presets(presets):
     else:
         print("Available presets:")
         for name, preset in presets.items():
-            print(f"{name}: Find '{preset['find']}' -> Replace '{preset['replace']}'")
+            print(f"{name:<50}: Find '{preset['find']}' -> Replace '{preset['replace']}'")
 
 def apply_preset(lines, preset):
     """Applies a preset to the G-code lines."""
@@ -68,7 +68,19 @@ def main():
     print("")
     # Input file path
     input_file = input("Enter the path to the G-code file: ")
+
+    if not os.path.exists(input_file):
+        print(f"Error: The file or directory does not exist.")
+        return
+    
     output_file = input("Enter the path to save the modified G-code file: ")
+
+    if os.path.exists(output_file):
+        print(f"The output file already exists. Overwrite? (y/n) then press enter: ")
+        input_overwrite = input().lower()
+        if input_overwrite!= "y":
+            print("Exiting...")
+            return
 
     # Read the G-code file
     lines = read_gcode(input_file)
@@ -86,7 +98,7 @@ def main():
         print("4. List all presets")
         print("5. Quit and save")
 
-        choice = input("Select an option (1-5): ")
+        choice = input("Select an option and press enter (1-5): ")
 
         if choice == "1":
             find_str = input("Enter text to find: ")
